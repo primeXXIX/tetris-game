@@ -1,15 +1,3 @@
-# Browser Games: Tetris
-
-## Challenge Rating
-
-This goal will likely be within your ZPD if you...
-
-- Can build web sites with HTML & CSS
-- Can add behavior to a web site with JavaScript
-- Can use jQuery
-- Have built other browser games
-- Are familiar with the rules of Tetris
-- Are interested in making more complex interactive web pages
 
 ## Description
 
