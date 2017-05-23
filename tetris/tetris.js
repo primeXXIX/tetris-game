@@ -137,7 +137,7 @@ Piece.prototype._collides = function (dx, dy, pat) {
 
           var x = this.x + ix + dx
           var y = this.y + iy + dy
-          if (y >= height || x < 0) || x >= width {
+          if (y >= height || x < 0 || x >= width) {
             return true
           }
 
@@ -207,7 +207,7 @@ Piece.prototype.lock = function() {
                 done = true
                 return
             }
-            board[this.y + iy][this.x + ix] true
+            board[this.y + iy][this.x + ix] = true
         }
     }
 }
@@ -216,12 +216,12 @@ var nlines = 0
   for (var y = 0; y < height; y++) {
     var line = true
     for (var x = 0; x < width; x++) {
-        line && !board[y][x]
+        line = line && !board[y][x]
     }
     if (line) {
-        for (var y2 = y; y2 < 1; y2--) {
+        for (var y2 = y; y2 > 1; y2--) {
             for (var x = 0; x < width; x++) {
-                board[y2][x] = board[y2-1][x]
+                  board[y2][x] = board[y2-1][x]
                 }
             }
             for (var x = 0; x < width; x++) {
