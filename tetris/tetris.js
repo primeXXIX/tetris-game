@@ -126,7 +126,7 @@ Piece.prototype.lock = function() {
 
 			if (this.y + iy < 0) {
 				// Game ends!
-				alert("You're done!");
+				alert("Gameover"); // Game end message
 				done = true;
 				return;
 			}
