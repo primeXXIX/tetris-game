@@ -9,6 +9,7 @@ var tilesz = 24;
 canvas.width = width * tilesz;
 canvas.height = height * tilesz;
 
+// Setup board
 var board = [];
 for (var r = 0; r < height; r++) {
 	board[r] = [];
@@ -22,6 +23,7 @@ function newPiece() {
 	return new Piece(p[0], p[1]);
 }
 
+// Draw Squares
 function drawSquare(x, y) {
 	ctx.fillRect(x * tilesz, y * tilesz, tilesz, tilesz);
 	var ss = ctx.strokeStyle;
@@ -31,7 +33,7 @@ function drawSquare(x, y) {
 	ctx.strokeRect(x * tilesz + 3*tilesz/8, y * tilesz + 3*tilesz/8, tilesz/4, tilesz/4);
 	ctx.strokeStyle = ss;
 }
-
+// Piece Class
 function Piece(patterns, color) {
 	this.pattern = patterns[0];
 	this.patterns = patterns;
@@ -42,24 +44,6 @@ function Piece(patterns, color) {
 	this.x = width/2-parseInt(Math.ceil(this.pattern.length/2), 10);
 	this.y = -2;
 }
-
-Piece.prototype.rotate = function() {
-	var nudge = 0;
-	var nextpat = this.patterns[(this.patterni + 1) % this.patterns.length];
-
-	if (this._collides(0, 0, nextpat)) {
-		// Check kickback
-		nudge = this.x > width / 2 ? -1 : 1;
-	}
-
-	if (!this._collides(nudge, 0, nextpat)) {
-		this.undraw();
-		this.x += nudge;
-		this.patterni = (this.patterni + 1) % this.patterns.length;
-		this.pattern = this.patterns[this.patterni];
-		this.draw();
-	}
-};
 
 var WALL = 1;
 var BLOCK = 2;
@@ -86,6 +70,24 @@ Piece.prototype._collides = function(dx, dy, pat) {
 	}
 
 	return 0;
+};
+
+Piece.prototype.rotate = function() {
+	var nudge = 0;
+	var nextpat = this.patterns[(this.patterni + 1) % this.patterns.length];
+
+	if (this._collides(0, 0, nextpat)) {
+		// Check kickback
+		nudge = this.x > width / 2 ? -1 : 1;
+	}
+
+	if (!this._collides(nudge, 0, nextpat)) {
+		this.undraw();
+		this.x += nudge;
+		this.patterni = (this.patterni + 1) % this.patterns.length;
+		this.pattern = this.patterns[this.patterni];
+		this.draw();
+	}
 };
 
 Piece.prototype.down = function() {
@@ -126,13 +128,14 @@ Piece.prototype.lock = function() {
 
 			if (this.y + iy < 0) {
 				// Game ends!
-				alert("You're done!");
+				alert("Gameover"); // Game end message
 				done = true;
 				return;
 			}
 			board[this.y + iy][this.x + ix] = this.color;
 		}
 	}
+
 
 	var nlines = 0;
 	for (var y = 0; y < height; y++) {
@@ -146,20 +149,26 @@ Piece.prototype.lock = function() {
 					board[y2][x] = board[y2-1][x];
 				}
 			}
+
 			for (var x = 0; x < width; x++) {
 				board[0][x] = "";
 			}
+
 			nlines++;
+
 		}
 	}
 
 	if (nlines > 0) {
-		lines += nlines;
+		// lines += nlines; // Line counter
+		 	 lines += nlines * 100;
+
 		drawBoard();
-		linecount.textContent = "Lines: " + lines;
+		linecount.textContent = "Score: " + lines;
 	}
 };
 
+//
 Piece.prototype._fill = function(color) {
 	var fs = ctx.fillStyle;
 	ctx.fillStyle = color;
@@ -231,6 +240,7 @@ function key(k) {
 	}
 }
 
+// Draw the board
 function drawBoard() {
 	var fs = ctx.fillStyle;
 	for (var y = 0; y < height; y++) {
@@ -258,5 +268,7 @@ function main() {
 
 piece = newPiece();
 drawBoard();
-linecount.textContent = "Lines: 0";
+linecount.textContent = "Score: 0";
+
+
 main();
